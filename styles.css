@@ -18,3 +18,32 @@
 @media(max-width:600px){.remainder-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.route-edges{grid-template-columns:repeat(2,minmax(0,1fr))}.route-stops{grid-template-columns:repeat(4,minmax(0,1fr))}.frost-cell{width:32px;height:32px}.history-cards{grid-template-columns:1fr}.switch-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}.recovered-strip{padding:12px}.strip-fields{width:100%;justify-content:center}.strip-fields div{flex:1;min-width:45px}.archive-table td,.archive-table th{padding:9px 7px}}
 
 .backup-actions{display:grid;gap:7px;margin:17px 0;padding:10px 0;border-top:1px solid #445158;border-bottom:1px solid #445158}.backup-btn{font-size:11px;color:#dbc2a5;background:#1d3035;border:1px solid #506066;padding:10px 7px;text-align:left}.backup-btn:hover{background:#304148}
+
+/* November edition: simpler, editorial landing page; hidden eleventh puzzle. */
+.brand-mark {font-size:24px;letter-spacing:-1px}
+.welcome {max-width:1060px;margin:0 auto;padding-top:76px}
+.welcome-hero {display:block;min-height:0;padding-bottom:30px;border-bottom:1px solid #425057}
+.hero-copy h1 {font-size:clamp(43px,5.3vw,72px);line-height:1.12;letter-spacing:-1.7px;margin:19px 0 19px}
+.hero-copy>p {max-width:680px;line-height:1.7;font-size:17px;margin-bottom:0}
+.onboarding-area {grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);align-items:start;margin:37px 0 80px;gap:43px}
+.onboarding {padding:28px 33px}
+.onboarding h2 {font-size:29px;margin:23px 0 12px}
+.collection-overview {padding:15px 0}
+.overview-item {padding:20px 5px}
+.overview-item b {font-size:18px}
+.surprise-note {border:1px solid #ba9670;background:#e8ddc8;color:#5a4533;display:flex;align-items:baseline;flex-wrap:wrap;gap:14px;padding:13px 17px;margin:0 0 28px}
+.surprise-note span {font-size:10px;font-weight:700;letter-spacing:1.6px;color:#985235;white-space:nowrap}
+.surprise-note strong {font:16px/1.5 Georgia,serif}
+@media(max-width:780px){
+  .welcome {padding-top:40px}
+  .welcome-hero {padding-bottom:25px}
+  .hero-copy h1 {font-size:clamp(38px,9vw,58px)}
+  .hero-copy>p {font-size:15px}
+  .onboarding-area {grid-template-columns:1fr;margin-top:30px;gap:20px}
+  .collection-overview {padding-top:0}
+}
+@media(max-width:410px){
+  .welcome {padding-top:30px}
+  .hero-copy h1 {font-size:37px}
+  .surprise-note {padding:13px}
+}

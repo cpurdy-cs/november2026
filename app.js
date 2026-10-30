@@ -83,12 +83,16 @@
     window.scrollTo(0, 0);
   }
   function nav() {
-    $('progress-fraction').textContent = String(state.solved).padStart(2, '0') + ' / 11';
-    $('record-nav').innerHTML = RECORDS.map((rec, i) => {
+    // Puzzle 11 is intentionally absent from the menu until Puzzle 10 is solved.
+    const revealed = state.solved >= 10;
+    const total = state.solved === 11 ? 11 : 10;
+    $('progress-fraction').textContent = String(state.solved).padStart(2, '0') + ' / ' + total;
+    $('record-nav').innerHTML = RECORDS.slice(0, revealed ? 11 : 10).map((rec, i) => {
       const locked = i > state.solved;
       const completed = i < state.solved;
+      const status = completed ? 'FILE OPENED' : locked ? 'SEALED / LOCKED' : i === 10 ? 'UNLISTED RECORD' : 'READY TO DECODE';
       return `<button type="button" class="${locked ? 'locked' : 'available'} ${view === i ? 'current' : ''}" data-view="${i}" ${locked ? 'disabled' : ''} aria-label="Record ${i + 1}: ${rec.title}${locked ? ' locked' : ''}">
-         <span class="nav-number">${String(i + 1).padStart(2, '0')}</span><span class="nav-info"><b>${rec.title}</b><small>${completed ? 'FILE OPENED' : locked ? 'SEALED / LOCKED' : 'READY TO DECODE'}</small></span><span class="nav-indicator">${completed ? '✓' : locked ? '⌁' : '↗'}</span>
+         <span class="nav-number">${String(i + 1).padStart(2, '0')}</span><span class="nav-info"><b>${rec.title}</b><small>${status}</small></span><span class="nav-indicator">${completed ? '✓' : locked ? '⌁' : '↗'}</span>
        </button>`;
     }).join('') + (state.solved === 11 ? `<button type="button" class="available ${view === 11 ? 'current' : ''}" data-view="11"><span class="nav-number">★</span><span class="nav-info"><b>Completion certificate</b><small>ALL ELEVEN OPENED</small></span><span class="nav-indicator">↗</span></button>` : '');
     $('record-nav').querySelectorAll('button[data-view]').forEach(button => {
@@ -259,9 +263,10 @@
   }
   function mysteryHTML(){
     const strips=puzzleData.strips;
-    return header(11,'The Eleventh Seal','FINAL ARCHIVE · THE WHOLE NOVEMBER COLLECTION','FINAL ACCESS')+`
-      <p class="narrative">The first ten records were never independent. Each released an index strip with an unusual day, glyph, dial, and two-digit seal. A final instruction sheet explains how those fragments combine. Every strip is needed.</p>
-      <div class="doc-block"><div class="doc-label">FINAL DIRECTIVE / REASSEMBLE THE INDEX</div>
+    return `<div class="surprise-note"><span>UNLISTED RECORD</span><strong>You finished the ten listed puzzles. One more record has appeared.</strong></div>` +
+      header(11,'The Eleventh Seal','NOVEMBER · INDEX RECONSTRUCTION','RECORD 11')+`
+      <p class="narrative">Each of the ten previous records included an index strip with a day, glyph, dial, and two-digit seal. This additional record explains how to combine those strips. Every one is needed.</p>
+      <div class="doc-block"><div class="doc-label">INDEX INSTRUCTIONS / REASSEMBLE THE STRIPS</div>
       <ol class="clue-list"><li>Collect all ten index strips. Order them by <strong>NOV DAY</strong> (November calendar date), smallest to largest. Record numbers are irrelevant.</li>
       <li>Decode each glyph by shifting it <strong>backward</strong> through the alphabet by its own DIAL value. Use <b>A=0</b> through <b>Z=25</b> and wrap around. The ten plaintext letters should form an intelligible archival phrase.</li>
       <li>For each plaintext letter, change its alphabet position to <b>A=1</b> through <b>Z=26</b>. Keep the two-digit SEAL from the same strip.</li>
@@ -276,7 +281,7 @@
     const code=A.completionCode(id);
     return `<div class="record-heading"><div><div class="record-number">ARCHIVE CERTIFICATE / ELEVEN RECORDS RECOVERED</div><h2>The collection is complete.</h2><p class="record-subtitle">THE NOVEMBER ARCHIVES · FINAL RECORD OPENED</p></div><div class="record-stamp">VERIFIED</div></div>
       <div class="final-record"><div class="final-medallion" aria-hidden="true"><span>XI</span><small>COMPLETE</small></div><h2>You opened the eleventh seal.</h2>
-      <p>Ten investigations. One final mystery. All eleven files in your personal November collection have been recovered.</p>
+      <p>You completed the ten listed puzzles and uncovered the additional eleventh record. Here is your completion code.</p>
       <div class="completion-code" id="code-display">${code}</div><div class="final-actions"><button id="copy-code-btn" class="primary-btn">Copy completion code ⧉</button><button id="review-btn" class="secondary-btn">Review recovered records</button></div>
       <p class="fine-print">Keep this code together with your participant ID. It is your completion certificate for the full eleven-puzzle challenge.</p></div>`;
   }
@@ -350,7 +355,7 @@
   }
   function onSwitchboard(e){
     e.preventDefault();const active=A.lightsFor(state.switches);
-    if(active.every((n,i)=>n===puzzleData.switchboard.target[i]))success($('switch-form'),'The lanterns match the target. The last record is opening…');
+    if(active.every((n,i)=>n===puzzleData.switchboard.target[i]))success($('switch-form'),'The lanterns match the target.');
     else failure('The lit pattern does not match the target.');
   }
   function saveBackup(){

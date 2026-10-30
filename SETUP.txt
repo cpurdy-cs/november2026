@@ -1,1 +1,1 @@
-Upload index.html, styles.css, logic.js, and app.js to the public GitHub Pages repository. Keep the separate teacher tools private.
+Upload index.html, styles.css, logic.js and app.js to the site. Keep teacher tools private. The extra eleventh record remains hidden until puzzle ten is solved.
