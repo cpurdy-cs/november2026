@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#121c22" />
+  <meta name="description" content="Mr. Purdy's Puzzles presents The November Archives, an eleven-part November puzzle hunt." />
+  <title>Mr. Purdy's Puzzles | The November Archives</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="logic.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="outer-frame">
+    <header class="masthead">
+      <div class="brand" aria-label="Mr. Purdy's Puzzles: The November Archives">
+        <div class="brand-mark" aria-hidden="true"><span>XI</span><small>26</small></div>
+        <div class="brand-text"><span class="eyebrow light">THE NOVEMBER ARCHIVES</span><strong>MR. PURDY'S <em>PUZZLES</em></strong></div>
+      </div>
+      <div class="mast-right"><span class="preview-flag">11 ARCHIVE FILES</span><span class="mast-number">VOL. XI · 2026</span></div>
+    </header>
+
+    <main id="app">
+      <section class="welcome" id="welcome">
+        <div class="welcome-hero">
+          <div class="hero-copy">
+            <div class="section-kicker"><span class="kicker-line"></span> THE NOVEMBER ARCHIVES · THE COLLECTION OPENS</div>
+            <h1>Every month has a story.<br /><i>November has secrets.</i></h1>
+            <p>Eleven sealed files. Ten challenging puzzles and one final mystery. Follow the evidence through numbers, codes, history, and deduction. Each correct answer opens another record.</p>
+            <p class="preview-copy">Ten mysteries conceal the pieces of an eleventh. What looks like a minor detail in one file may matter much later.</p>
+            <div class="hero-stats" aria-label="Challenge details">
+              <div><strong>11</strong><small>PUZZLES IN ALL</small></div>
+              <div><strong>10</strong><small>ARCHIVE CHALLENGES</small></div>
+              <div><strong>01</strong><small>FINAL MYSTERY</small></div>
+            </div>
+          </div>
+          <div class="archive-visual" aria-hidden="true">
+            <div class="visual-folder visual-folder-back"><span>RECORD 02</span></div>
+            <div class="visual-folder visual-folder-mid"><span>CONFIDENTIAL · 11 / 23</span></div>
+            <div class="visual-folder visual-folder-front">
+              <div class="folder-top">ARCHIVE REFERENCE / NOV-26</div>
+              <div class="seal-circle"><span>XI</span><small>THE ARCHIVES</small></div>
+              <div class="folder-footer"><span>CASE FILES</span><strong>01 — 11</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="onboarding-area">
+          <section class="onboarding paper-panel">
+            <div class="panel-topline"><span>ADMISSION DESK</span><span>FORM № 001</span></div>
+            <h2>Your own copy of the archive</h2>
+            <p>Each participant gets an eight-character ID. It changes the figures, intercepted messages, and even the seating arrangements in your files. Save your ID so you can recreate your version later.</p>
+            <div class="onboard-actions">
+              <button class="primary-btn" id="new-id-btn" type="button">Generate my participant ID <span aria-hidden="true">↗</span></button>
+              <div class="or-line">OR RETURN WITH AN EXISTING ID</div>
+              <form id="join-form" class="join-form">
+                <label for="join-id">Participant ID</label>
+                <div class="join-row"><input id="join-id" type="text" maxlength="8" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="8-character ID" aria-describedby="join-feedback" /><button class="secondary-btn" type="submit">Open archive →</button></div>
+                <div id="join-feedback" class="feedback" role="status" aria-live="polite"></div>
+              </form>
+              <p class="small-note">Progress is saved in this browser. An ID recreates the same puzzle variants on another device, but does not transfer solved progress.</p>
+            </div>
+          </section>
+          <div class="collection-overview">
+            <div class="overview-heading"><span>A GLIMPSE INSIDE</span><span>11 RECORDS TO RECOVER</span></div>
+            <div class="overview-item"><span class="overview-index">01</span><div><b>The Armistice Telegram</b><small>Veterans Day · Enciphered transmissions</small></div><span class="overview-arrow">↗</span></div>
+            <div class="overview-item"><span class="overview-index">02</span><div><b>The November 23 Ledger</b><small>Fibonacci Day · Mathematical sequences</small></div><span class="overview-arrow">↗</span></div>
+            <div class="overview-item"><span class="overview-index">03</span><div><b>The Missing Place Cards</b><small>Thanksgiving · Deductive logic</small></div><span class="overview-arrow">↗</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace hidden" id="workspace">
+        <aside class="left-rail">
+          <div class="rail-label">YOUR ARCHIVE</div>
+          <div class="participant-panel"><span class="eyebrow light">PARTICIPANT NO.</span><div class="id-row"><strong id="participant-display">—</strong><button class="icon-btn" id="copy-id-btn" title="Copy participant ID" aria-label="Copy participant ID">⧉</button></div><small>Keep this ID to return to your files.</small></div>
+          <div class="rail-label progress-label">RECORD INVENTORY <span id="progress-fraction">00 / 11</span></div>
+          <nav id="record-nav" class="record-nav" aria-label="Puzzle records"></nav>
+          <div class="backup-actions"><button type="button" id="backup-save-btn" class="backup-btn">↓ Save progress file</button><button type="button" id="backup-load-btn" class="backup-btn">↑ Restore progress file</button><input type="file" id="backup-file" accept=".json,application/json" hidden aria-label="Choose saved progress file" /></div>
+          <div class="rail-bottom"><div class="rail-dot-line"><span class="dot"></span> YOUR WORK IS SAVED LOCALLY</div><button class="text-button" id="switch-id-btn">Switch participant ID ↗</button></div>
+        </aside>
+        <div class="center-area">
+          <div class="record-toolbar"><span id="toolbar-path">COLLECTION / RECORD 01</span><span id="toolbar-status">STATUS: UNRESOLVED</span></div>
+          <div id="record-body" class="record-body"></div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer"><span>MR. PURDY'S PUZZLES</span><span>THE NOVEMBER ARCHIVES · 2026</span></footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

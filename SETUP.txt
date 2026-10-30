@@ -1,0 +1,1 @@
+Upload index.html, styles.css, logic.js, and app.js to the public GitHub Pages repository. Keep the separate teacher tools private.
