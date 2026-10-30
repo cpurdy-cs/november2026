@@ -40,6 +40,7 @@
       notes: saved.notes && typeof saved.notes === 'object' ? saved.notes : {},
       seats: Array.isArray(saved.seats) && saved.seats.length === 7 ? saved.seats : Array(7).fill(''),
       switches: Array.isArray(saved.switches) && saved.switches.length === 10 ? saved.switches.map(x => x ? 1 : 0) : Array(10).fill(0),
+      frostGrids: Array.isArray(saved.frostGrids) && saved.frostGrids.length === 3 ? saved.frostGrids.map(grid => Array.isArray(grid) && grid.length === 49 ? grid.map(x => x === 1 ? 1 : 0) : Array(49).fill(0)) : Array.from({length:3},()=>Array(49).fill(0)),
       drafts: saved.drafts && typeof saved.drafts === 'object' ? saved.drafts : {}
     };
   }
@@ -115,7 +116,7 @@
   function telegramHTML() {
     const strips = puzzleData.telegram.strips.map(({ station, symbol }) => `<div class="telegram-strip"><span class="tag">LINE ${String(station).padStart(2, '0')}</span><strong>${symbol}</strong></div>`).join('');
     return header(1, 'The Armistice Telegram', 'NOVEMBER 11 · THE ELEVENTH HOUR', 'INTERCEPTED') + `
-       <p class="narrative">At the eleventh hour of the eleventh day of the eleventh month in 1918, an armistice took effect. In this fictional archive, an operator's eight-digit routing number survived only as a series of encrypted signal slips. Nine slips were recovered. One is a forgery.</p>
+       <p class="narrative">At the eleventh hour of the eleventh day of the eleventh month in 1918, an armistice took effect. An operator's eight-digit routing number survives only as a series of encrypted signal slips. Nine slips were recovered. One is a forgery.</p>
        <div class="doc-block"><div class="doc-label">TRANSMITTER MANUAL / ROTOR XI</div>
          <p>Each original digit <span class="mono">D</span> (0 through 9) was transformed into a letter. Letters represent values <b>A = 0</b> through <b>Z = 25</b>. Line numbers <b>i</b> are 1 through 8. The four-digit key is <b>1918</b>, repeated as needed, starting at line 1.</p>
          <div class="formula">K<sub>i</sub> = [1, 9, 1, 8, 1, 9, 1, 8] at line i</div>
@@ -123,7 +124,7 @@
          <p>To identify the forged duplicate, the last digit obeys the operator's checksum:</p>
          <div class="formula">D<sub>8</sub> = (3D<sub>1</sub> + D<sub>2</sub> + 4D<sub>3</sub> + D<sub>4</sub> + 5D<sub>5</sub> + 9D<sub>6</sub> + 2D<sub>7</sub>) mod 10</div>
        </div>
-       <div class="doc-label">RECOVERED SIGNAL SLIPS / SCRAMBLED ORDER</div><div class="telegram-table">${strips}</div>
+       <div class="doc-label">RECOVERED SIGNAL SLIPS</div><div class="telegram-table">${strips}</div>
        <p class="doc-footnote">Two slips claim the same line number. Only one produces a valid eight-digit routing number. Preserve all leading zeros.</p>
        ${answerBlock('Restore the routing number', 'Enter the eight original digits in line-number order, not the order in which the slips were recovered.', '00000000', 8, 'Eight digit routing number')}
        ${notebook(0)}`;
@@ -131,7 +132,7 @@
   function ledgerHTML() {
     const { a0, a1 } = puzzleData.ledger;
     return header(2, 'The November 23 Ledger', 'NOVEMBER 23 · FIBONACCI DAY', 'UNRESOLVED') + `
-       <p class="narrative">November 23 is often written 11/23: the opening digits of the Fibonacci sequence, 1, 1, 2, 3. A ledger discovered between the archive's files contains a sequence built on the same rule, but its first two entries are different for every participant.</p>
+       <p class="narrative">November 23 can be written 11/23, the opening digits of the Fibonacci sequence: 1, 1, 2, 3. This ledger follows the same pattern, starting with the two entries shown below.</p>
        <div class="doc-block"><div class="doc-label">EXTRACT / MATHEMATICAL LEDGER</div><p>The first two entries of your ledger are:</p>
        <div class="ledger-head"><div class="ledger-chip"><small>ENTRY 0</small><strong>${a0.toLocaleString('en-US')}</strong></div><div class="ledger-chip"><small>ENTRY 1</small><strong>${a1.toLocaleString('en-US')}</strong></div></div>
        <p>For each subsequent entry, add the two preceding entries and retain only the final six digits:</p>
@@ -140,7 +141,7 @@
        <div class="doc-block dark"><div class="doc-label">INDEXED ENTRIES / THE THREE MARKS</div>
        <div class="ledger-indices"><span>L<sub>1123</sub></span><span>L<sub>1918</sub></span><span>L<sub>2026</sub></span></div>
        <div class="formula">SEAL = (L<sub>1123</sub> + 11 × L<sub>1918</sub> + 23 × L<sub>2026</sub>) mod 1,000,000</div>
-       <p>The archive accepts exactly six digits, including any leading zeros. A spreadsheet, a program, or another reliable method may be used.</p></div>
+       <p>Enter exactly six digits, including any leading zeros.</p></div>
        ${answerBlock('Recover the ledger seal', 'Enter the six-digit result of the final formula.', '000000', 6, 'Six digit ledger seal')}
        ${notebook(1)}`;
   }
@@ -174,7 +175,7 @@
       <p>The number of preserved jars was an integer strictly between <strong>${p.low.toLocaleString('en-US')}</strong> and <strong>${p.high.toLocaleString('en-US')}</strong>. Each clerk made bundles from the <em>entire</em> stock, leaving the following leftovers:</p>
       <div class="remainder-grid">${p.remainder.map(x=>`<div class="remainder-card"><small>GROUPS OF ${x.n}</small><strong>${x.r}</strong><span>left over</span></div>`).join('')}</div>
       <p>All four statements are exact. No jars were added or removed between counts.</p></div>
-      <div class="doc-block dark"><div class="doc-label">WAREHOUSE ORDER / RECONCILIATION</div><p>Restore the <b>one</b> total consistent with the bound and all four remainder conditions. The counting notebooks contain no other usable figures.</p></div>
+      <div class="doc-block dark"><div class="doc-label">FIND THE INVENTORY TOTAL</div><p>Find the only whole-number total within the given range that satisfies all four remainder conditions.</p></div>
       ${answerBlock('Recover the missing inventory','Enter the exact whole-number count, with no commas.','00000',5,'Total jars')}${notebook(3)}`;
   }
   function clockHTML() {
@@ -192,7 +193,7 @@
   function ballotHTML() {
     const p=puzzleData.ballot;
     return header(6,'The Election-Night Ledger','NOVEMBER 03 · ELECTION DAY','COUNT DISPUTED')+`
-      <p class="narrative">A fictional archive committee used ranked-choice voting to select the custodian of its November collection. Six bundles of ballots survived, but the round-by-round totals did not.</p>
+      <p class="narrative">An archive committee used ranked-choice voting to select the custodian of its November collection. Six bundles of ballots survived, but the round-by-round totals did not.</p>
       <div class="doc-block"><div class="doc-label">ELECTION BOARD / COUNTING RULES</div>
       <p>Each ballot lists all four candidates from first choice to last. Count first choices among the candidates still in the race. If nobody has <b>more than half of all ${p.total} votes</b>, eliminate the candidate with the fewest votes. Transfer those ballots to their next remaining choice. Repeat until someone has an outright majority.</p>
       <p>There are no ties for the fewest votes in any elimination round.</p></div>
@@ -203,15 +204,59 @@
   function routeHTML() {
     const p=puzzleData.route;
     return header(7,'The Remembrance Route','NOVEMBER 19 · AN ARCHIVAL ROUTE MAP','ROUTE LOST')+`
-      <p class="narrative">A fictional remembrance procession follows a network of one-way streets. The parade has to start at the archive hall, finish at the memorial, and visit both the library and the public square. The original route sheet is missing.</p>
+      <p class="narrative">A remembrance procession follows a network of one-way streets. The parade has to start at the archive hall, finish at the memorial, and visit both the library and the public square. The original route sheet is missing.</p>
       <div class="doc-block"><div class="doc-label">CITY SURVEYOR / NETWORK RULES</div>
-      <p>Start at <strong>A (Archive Hall)</strong>, finish at <strong>H (Memorial)</strong>, and visit <strong>C (Library)</strong> and <strong>F (Square)</strong> somewhere along the route. Only the listed directed streets exist; all streets go forward in the alphabet. Costs represent fictional permit units, not geographical distance.</p>
+      <p>Start at <strong>A (Archive Hall)</strong>, finish at <strong>H (Memorial)</strong>, and visit <strong>C (Library)</strong> and <strong>F (Square)</strong> somewhere along the route. Only the listed directed streets exist; all streets go forward in the alphabet. Costs represent permit costs, not geographical distance.</p>
       <div class="route-stops">${'ABCDEFGH'.split('').map((x,i)=>`<span class="${'ACFH'.includes(x)?'critical':''}">${x}<small>${x==='A'?'START':x==='H'?'END':x==='C'?'LIBRARY':x==='F'?'SQUARE':'WAYPOINT'}</small></span>`).join('')}</div>
       <p>You must start at <strong>A</strong>, visit <strong>C</strong> and <strong>F</strong>, and finish at <strong>H</strong>. The other stops (<strong>B, D, E, and G</strong>) are optional. You may only travel along the listed one-way streets. Find the route with the <strong>lowest total cost</strong>.</p></div>
       <div class="doc-label">ONE-WAY STREETS / PERMIT COSTS</div>
       <div class="route-edges">${p.edges.map(e=>`<div class="route-edge"><span>${e.from} <b>→</b> ${e.to}</span><strong>${e.cost}</strong></div>`).join('')}</div>
       <div class="doc-block dark"><div class="doc-label">PERMIT AUTHORIZATION</div><p>Enter the complete sequence of visited stop letters, followed by a hyphen and the total cost.</p><div class="formula">EXAMPLE: ABCEFH-98</div></div>
       ${answerBlock('Reconstruct the optimal route','Include A and H and all intermediate stops actually used.','ABCEFGH-99',18,'Minimum cost route')}${notebook(6)}`;
+  }
+  // Manual scratch grids: these never calculate or reveal a solution for students.
+  function frostWorkHTML() {
+    return `<section class="frost-workspace" aria-label="Working grids for three generations">
+      <div class="doc-label">WORKING GRIDS / GENERATIONS 1–3</div>
+      <p class="frost-work-instructions">Click squares to switch them between active and inactive as you work through each generation. Each grid starts blank.</p>
+      <div class="frost-work-grids">${state.frostGrids.map((grid,g)=>`<section class="frost-work-board" aria-label="Generation ${g+1}">
+        <div class="frost-board-title">GENERATION ${g+1}</div>
+        <div class="frost-edit-map" role="group" aria-label="Generation ${g+1}, seven by seven clickable grid">
+          ${grid.map((on,i)=>`<button type="button" class="frost-draw-cell ${on?'on':''}" data-frost-grid="${g}" data-frost-cell="${i}" aria-pressed="${!!on}" aria-label="Generation ${g+1}, row ${Math.floor(i/7)+1}, column ${i%7+1}"></button>`).join('')}
+        </div><div class="frost-board-actions"><button type="button" class="frost-board-action" data-frost-copy="${g}">Copy previous</button><button type="button" class="frost-board-action" data-frost-clear="${g}">Clear</button></div>
+      </section>`).join('')}</div>
+      <p class="frost-work-note">These grids are your working space. Enter the seven row counts from Generation 3 as your answer.</p>
+    </section>`;
+  }
+  function wireFrostGrids() {
+    const updateBoard = (g) => {
+      const board=document.querySelector(`.frost-work-board:nth-child(${g+1})`);
+      if (!board) return;
+      board.querySelectorAll('[data-frost-cell]').forEach((cell,i)=>{
+        const on=!!state.frostGrids[g][i];
+        cell.classList.toggle('on',on);
+        cell.setAttribute('aria-pressed',String(on));
+      });
+    };
+    document.querySelectorAll('[data-frost-cell]').forEach(cell=>cell.addEventListener('click',()=>{
+      const g=Number(cell.dataset.frostGrid), i=Number(cell.dataset.frostCell);
+      state.frostGrids[g][i]^=1;
+      const on=!!state.frostGrids[g][i];
+      cell.classList.toggle('on',on);
+      cell.setAttribute('aria-pressed',String(on));
+      saveState();
+    }));
+    document.querySelectorAll('[data-frost-copy]').forEach(button=>button.addEventListener('click',()=>{
+      const g=Number(button.dataset.frostCopy);
+      const previous=g===0?puzzleData.frost.original.flat():state.frostGrids[g-1];
+      state.frostGrids[g]=previous.slice();
+      updateBoard(g);saveState();
+    }));
+    document.querySelectorAll('[data-frost-clear]').forEach(button=>button.addEventListener('click',()=>{
+      const g=Number(button.dataset.frostClear);
+      state.frostGrids[g]=Array(49).fill(0);
+      updateBoard(g);saveState();
+    }));
   }
   function frostHTML() {
     const p=puzzleData.frost;
@@ -224,6 +269,7 @@
       <p>Repeat these rules for <strong>three complete generations</strong> beyond the printed starting arrangement.</p></div>
       <div class="doc-label">WEATHER STATION / ORIGINAL SENSOR MAP (GENERATION 0)</div>
       <div class="frost-layout"><div class="frost-map" role="img" aria-label="Seven by seven grid of sensor states">${rows}</div><div class="sensor-notes"><b>INSTRUMENT 7 × 7</b><span>■ &nbsp; active</span><span>□ &nbsp; inactive</span><hr/><p>Read the final grid row by row, top to bottom. Count the number of active sensors in each row and write those seven counts consecutively.</p></div></div>
+      ${frostWorkHTML()}
       ${answerBlock('Read the frost signature','Enter seven digits, one count (0–7) for each row after the third update.','0000000',7,'Seven row counts')}${notebook(7)}`;
   }
   function historyHTML() {
@@ -305,6 +351,7 @@
       $('answer-input').addEventListener('input',()=>{state.drafts[view]=$('answer-input').value;saveState();});
       form.addEventListener('submit',onAnswer);
     }
+    if(view===7) wireFrostGrids();
     const seatingForm=$('seating-form');
     if(seatingForm){
       document.querySelectorAll('.seat-select').forEach(el=>el.addEventListener('change',()=>{
@@ -384,7 +431,8 @@
         notes:Object.fromEntries(Object.entries(p.notes||{}).filter(([k,v])=>/^([0-9]|10)$/.test(k)&&typeof v==='string').map(([k,v])=>[k,v.slice(0,20000)])),
         drafts:Object.fromEntries(Object.entries(p.drafts||{}).filter(([k,v])=>/^([0-9]|10)$/.test(k)&&typeof v==='string').map(([k,v])=>[k,v.slice(0,1000)])),
         seats:Array.isArray(p.seats)&&p.seats.length===7?p.seats.map(x=>typeof x==='string'&&/^[ABCDEFG]?$/.test(x)?x:''):Array(7).fill(''),
-        switches:Array.isArray(p.switches)&&p.switches.length===10?p.switches.map(x=>x?1:0):Array(10).fill(0)
+        switches:Array.isArray(p.switches)&&p.switches.length===10?p.switches.map(x=>x?1:0):Array(10).fill(0),
+        frostGrids:Array.isArray(p.frostGrids)&&p.frostGrids.length===3?p.frostGrids.map(grid=>Array.isArray(grid)&&grid.length===49?grid.map(x=>x===1?1:0):Array(49).fill(0)):Array.from({length:3},()=>Array(49).fill(0))
       };
       state=cleaned;saveState();view=state.solved;render();window.scrollTo({top:0,behavior:'smooth'});
       showToast('Progress restored for '+id+'.');

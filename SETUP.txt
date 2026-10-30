@@ -1,1 +1,1 @@
-Upload index.html, styles.css, logic.js, and app.js to your website. Do not publish the separate teacher tools. This edition uses the school maroon-and-gray color scheme; the puzzle answers are unchanged.
+Upload only index.html, styles.css, logic.js, and app.js to your student site. Do not upload teacher files.
